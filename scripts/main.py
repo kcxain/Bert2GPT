@@ -401,6 +401,13 @@ def predict(
     output_str = tgt_tokenizer.batch_decode(outputs, skip_special_tokens=True)
     return output_str
 
+def read_file(path):
+    text = []
+    f = open(path, encoding='utf-8')
+    lines = f.readlines()
+    for line in lines:
+        text.append(line.strip())
+    return text
 
 if __name__ == "__main__":
     parse = argparse.ArgumentParser()
