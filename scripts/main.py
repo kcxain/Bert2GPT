@@ -170,17 +170,37 @@ def main(args):
         print(vars(args))
     model, src_tokenizer, tgt_tokenizer, optimizer, scheduler = get_model(args)
     if args.ispredict:
-        while True:
-            input_str = input("src: ")
-            output_str = predict(
-                input_str,
-                model,
-                src_tokenizer,
-                tgt_tokenizer,
-                args.max_src_len,
-                args.max_tgt_len,
-            )
-            print(output_str)
+        s = input("loader or sentence?(l or s)")
+        if (s == 'l'):
+            source_path = input("src_file: ")
+            text = read_file(source_path)
+            output = []
+            for i in range(0, len(text), 10):
+                line = text[i:i + 10]
+                output_str = predict(
+                    line,
+                    model,
+                    src_tokenizer,
+                    tgt_tokenizer,
+                    args.max_src_len,
+                    args.max_tgt_len,
+                )
+                output.extend(output_str)
+            target_path = input("tgt_file: ")
+            with open(source_path, 'w', encoding='utf-8') as tgt_obj:
+                tgt_obj.write(output)
+        else:
+            while (True):
+                source = input("src: ")
+                output_str = predict(
+                    source,
+                    model,
+                    src_tokenizer,
+                    tgt_tokenizer,
+                    args.max_src_len,
+                    args.max_tgt_len,
+                )
+                print(output_str)
     else:
         # 自己定义了验证集
         if args.eval_data_path:
